@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Công Thức Pha Chế</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Reset & Cấu hình chung */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #334155;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 15px;
+        }
+
+        /* Khối (Box) Container */
+        .box {
+            background: #ffffff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #0f172a;
+            margin-bottom: 15px;
+        }
+
+        /* Form Inputs & Selects */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background-color: #fff;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Bố cục hàng nguyên liệu (Ingredient Row) */
+        .ingredient-row {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 10px;
+            gap: 15px;
+        }
+
+        .ingredient-row label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            min-width: 160px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #334155;
+        }
+
+        .ingredient-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #3b82f6;
+        }
+
+        .ingredient-row input[type="text"] {
+            flex: 1;
+        }
+
+        /* Buttons */
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+        }
+
+        button.btn-danger {
+            background-color: #ef4444;
+        }
+
+        button.btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        button.btn-small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+        }
+
+        button.btn-outline {
+            background-color: transparent;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        button.btn-outline:hover {
+            background-color: #eff6ff;
+        }
+
+        /* Danh sách Folder & Công thức */
+        .folder {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .folder-header {
+            background: #f1f5f9;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            border-bottom: 1px solid #e2e8f0;
+            color: #0f172a;
+        }
+
+        .ct {
+            padding: 15px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .ct:last-child {
+            border-bottom: none;
+        }
+
+        .ct:hover {
+            background: #f8fafc;
+        }
+
+        .ct-info {
+            flex: 1;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+
+        .ct-info b {
+            color: #1e293b;
+        }
+
+        .ct-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Kết quả & Thông báo */
+        .red {
+            color: #b91c1c;
+            background: #fef2f2;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+            margin-bottom: 15px;
+        }
+
+        .green {
+            color: #15803d;
+            background: #f0fdf4;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+            margin-bottom: 15px;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 20px 0;
+        }
+
+        /* Tiện ích */
+        .d-flex { display: flex; gap: 10px; align-items: center; }
+        .mt-3 { margin-top: 15px; }
+        .mb-3 { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>📁 Tạo Tệp Tên Nước</h2>
+        <div class="d-flex">
+            <input type="text" id="folderName" placeholder="Ví dụ: Hồng Trà, Trà Sữa...">
+            <button onclick="taoFolder()">Tạo Tệp</button>
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>📝 Thêm Công Thức Mới</h2>
+        
+        <div class="grid-3">
+            <div class="form-group">
+                <label>Chọn Tệp:</label>
+                <select id="folderSelect"></select>
+            </div>
+            <div class="form-group">
+                <label>Lượng Đá:</label>
+                <select id="luongDa">
+                    <option>Đá bình thường</option>
+                    <option>Ít đá</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Độ Đường:</label>
+                <select id="doDuong">
+                    <option>100%</option>
+                    <option>70%</option>
+                    <option>50%</option>
+                    <option>30%</option>
+                    <option>0%</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group" style="max-width: 300px; margin-bottom: 25px;">
+            <label>Size Ly:</label>
+            <input type="text" id="size" placeholder="Ví dụ: M, L...">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>Thành phần pha chế</h3>
+            <button type="button" class="btn-small btn-outline" onclick="themThanhPhanMoi()">➕ Thêm thành phần mới</button>
+        </div>
+        
+        <div id="containerThanhPhan"></div>
+
+        <button id="btnLuu" class="mt-3" style="width: 100%; padding: 12px; font-size: 1.05rem;" onclick="themCongThuc()">
+            💾 Lưu Công Thức
+        </button>
+    </div>
+
+    <div class="box">
+        <h2>🗂 Danh Sách Tệp & Công Thức</h2>
+        <div id="dsFolder"></div>
+    </div>
+
+    <div class="box">
+        <h2>🎯 Kiểm Tra Công Thức</h2>
+        <div class="d-flex mb-3">
+            <select id="testFolder" style="max-width: 300px;"></select>
+            <button onclick="chonNgauNhien()">Lấy Đề Ngẫu Nhiên</button>
+        </div>
+        <div id="deThi"></div>
+    </div>
+
+    <script>
+        // Khởi tạo data công thức và danh sách nguyên liệu
+        let data = JSON.parse(localStorage.getItem("phaCheData")) || [];
+        
+        // Danh sách nguyên liệu mặc định ban đầu nếu chưa có trong LocalStorage
+        let nguyenLieuMacDinh = [
+            { id: "da", label: "Đá", type: "text" }, // Đá mặc định luôn hiển thị dạng text
+            { id: "traCoDuong", label: "Trà có đường", type: "checkbox" },
+            { id: "traKhongDuong", label: "Trà không đường", type: "checkbox" },
+            { id: "duong", label: "Đường", type: "checkbox" },
+            { id: "chanh", label: "Chanh", type: "checkbox" },
+            { id: "matOng", label: "Mật ong", type: "checkbox" }
+        ];
+        let dsNguyenLieu = JSON.parse(localStorage.getItem("dsNguyenLieu")) || nguyenLieuMacDinh;
+
+        save();
+
+        function save() {
+            localStorage.setItem("phaCheData", JSON.stringify(data));
+            localStorage.setItem("dsNguyenLieu", JSON.stringify(dsNguyenLieu));
+            renderNguyenLieuForm();
+            renderFolders();
+        }
+
+        // Hàm sinh giao diện các thành phần pha chế trong form điền dựa trên mảng nguyên liệu
+        function renderNguyenLieuForm() {
+            let html = "";
+            dsNguyenLieu.forEach(nl => {
+                if(nl.id === "da") {
+                    html += `
+                    <div class="ingredient-row">
+                        <label style="color: #334155; font-weight: 600;">🧊 ${nl.label}</label>
+                        <input type="text" id="${nl.id}" placeholder="Nhập định lượng đá...">
+                    </div>`;
+                } else {
+                    html += `
+                    <div class="ingredient-row">
+                        <label><input type="checkbox" id="cb_${nl.id}"> ${nl.label}</label>
+                        <input type="text" id="${nl.id}" placeholder="Nhập định lượng...">
+                    </div>`;
+                }
+            });
+            document.getElementById("containerThanhPhan").innerHTML = html;
+        }
+
+        // Hàm giúp người dùng thêm một thành phần/nguyên liệu mới tự chọn
+        function themThanhPhanMoi() {
+            let tenMoi = prompt("Nhập tên thành phần mới muốn thêm (Ví dụ: Sữa đặc, Trân châu...):");
+            if (!tenMoi || tenMoi.trim() === "") return;
+            
+            tenMoi = tenMoi.trim();
+            // Tạo ID không dấu, viết liền để gán cho các thẻ HTML input
+            let idMoi = "nl_" + Date.now(); 
+
+            // Thêm vào mảng quản lý nguyên liệu
+            dsNguyenLieu.push({
+                id: idMoi,
+                label: tenMoi,
+                type: "checkbox"
+            });
+
+            save();
+            alert(`Đã thêm thành phần "${tenMoi}" thành công vào danh sách!`);
+        }
+
+        function taoFolder() {
+            let ten = folderName.value.trim();
+            if (!ten) {
+                alert("Vui lòng nhập tên nước!");
+                return;
+            }
+            data.push({ ten: ten, congThuc: [] });
+            save();
+            folderName.value = "";
+        }
+
+        function renderFolders() {
+            folderSelect.innerHTML = "";
+            testFolder.innerHTML = "";
+            dsFolder.innerHTML = "";
+
+            data.forEach((f, i) => {
+                let optionHTML = `<option value="${i}">${f.ten}</option>`;
+                folderSelect.innerHTML += optionHTML;
+                testFolder.innerHTML += optionHTML;
+
+                let html = `
+                <div class="folder">
+                    <div class="folder-header">
+                        <span>📁 ${f.ten}</span>
+                        <button class="btn-danger btn-small" onclick="xoaFolder(${i})">Xóa Tệp</button>
+                    </div>
+                `;
+
+                if (f.congThuc.length === 0) {
+                    html += `<div class="ct"><div class="ct-info" style="color:#94a3b8; font-style:italic;">Chưa có công thức nào...</div></div>`;
+                } else {
+                    f.congThuc.forEach((ct, j) => {
+                        html += `
+                        <div class="ct">
+                            <div class="ct-info">
+                                <b>Size:</b> ${ct.size} &nbsp;|&nbsp; 
+                                <b>Đá:</b> ${ct.luongDa} &nbsp;|&nbsp; 
+                                <b>Đường:</b> ${ct.doDuong}
+                                <div style="margin-top: 5px; font-size: 0.85rem; color: #64748b;">
+                                    ${renderChiTietCongThucInDanhSach(ct)}
+                                </div>
+                            </div>
+                            <div class="ct-actions">
+                                <button class="btn-outline btn-small" onclick="suaCongThuc(${i},${j})">Sửa</button>
+                                <button class="btn-danger btn-small" onclick="xoaCongThuc(${i},${j})">Xóa</button>
+                            </div>
+                        </div>
+                        `;
+                    });
+                }
+                html += "</div>";
+                dsFolder.innerHTML += html;
+            });
+        }
+
+        // Hàm phụ trợ hiển thị nhanh định lượng nguyên liệu ra ngoài danh sách
+        function renderChiTietCongThucInDanhSach(ct) {
+            let result = [];
+            if(ct.thanhPhan) {
+                Object.keys(ct.thanhPhan).forEach(key => {
+                    let infoNL = dsNguyenLieu.find(n => n.id === key);
+                    let tenNL = infoNL ? infoNL.label : key;
+                    let obj = ct.thanhPhan[key];
+                    if(key === "da" && obj.gt) {
+                        result.push(`Đá (${obj.gt})`);
+                    } else if(obj.co) {
+                        result.push(`${tenNL} (${obj.gt})`);
+                    }
+                });
+            }
+            return result.join(" - ");
+        }
+
+        function xoaFolder(i) {
+            if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tệp này?")) {
+                data.splice(i, 1);
+                save();
+            }
+        }
+
+        function themCongThuc() {
+            let folder = folderSelect.value;
+            if (folder === "") {
+                alert("Vui lòng tạo tệp trước!");
+                return;
+            }
+
+            // Thu thập dữ liệu pha chế động dựa trên danh sách nguyên liệu hiện có
+            let thanhPhanData = {};
+            dsNguyenLieu.forEach(nl => {
+                if(nl.id === "da") {
+                    thanhPhanData[nl.id] = { co: true, gt: document.getElementById(nl.id).value };
+                } else {
+                    let cb = document.getElementById("cb_" + nl.id);
+                    let input = document.getElementById(nl.id);
+                    thanhPhanData[nl.id] = { co: cb.checked, gt: input.value };
+                }
+            });
+
+            let ct = {
+                size: size.value,
+                luongDa: luongDa.value,
+                doDuong: doDuong.value,
+                thanhPhan: thanhPhanData
+            };
+
+            if (editFolder != -1) {
+                data[editFolder].congThuc[editIndex] = ct;
+                editFolder = -1;
+                editIndex = -1;
+                alert("Đã cập nhật công thức thành công!");
+                document.getElementById("btnLuu").innerHTML = "💾 Lưu Công Thức";
+            } else {
+                data[folder].congThuc.push(ct);
+                alert("Đã lưu công thức thành công!");
+            }
+
+            // Reset form điền sau khi lưu xong
+            size.value = "";
+            dsNguyenLieu.forEach(nl => {
+                if(nl.id !== "da") document.getElementById("cb_" + nl.id).checked = false;
+                document.getElementById(nl.id).value = "";
+            });
+
+            save();
+        }
+
+        function xoaCongThuc(i, j) {
+            if (confirm("Bạn có chắc chắn muốn xóa công thức này?")) {
+                data[i].congThuc.splice(j, 1);
+                save();
+            }
+        }
+
+        function suaCongThuc(i, j) {
+            let ct = data[i].congThuc[j];
+            editFolder = i;
+            editIndex = j;
+
+            folderSelect.value = i;
+            size.value = ct.size;
+            luongDa.value = ct.luongDa;
+            doDuong.value = ct.doDuong;
+
+            // Đổ lại dữ liệu cũ vào form điền nguyên liệu động
+            if(ct.thanhPhan) {
+                dsNguyenLieu.forEach(nl => {
+                    let dataNLCu = ct.thanhPhan[nl.id];
+                    if(dataNLCu) {
+                        if(nl.id !== "da") {
+                            document.getElementById("cb_" + nl.id).checked = dataNLCu.co;
+                        }
+                        document.getElementById(nl.id).value = dataNLCu.gt || "";
+                    }
+                });
+            }
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            document.getElementById("btnLuu").innerHTML = "✏️ Cập Nhật Công Thức";
+        }
+
+        let editFolder = -1;
+        let editIndex = -1;
+        let currentCT = null;
+
+        function chonNgauNhien() {
+            let i = testFolder.value;
+            if (!data[i] || data[i].congThuc.length == 0) {
+                alert("Tệp này chưa có công thức nào để kiểm tra!");
+                return;
+            }
+
+            let rd = Math.floor(Math.random() * data[i].congThuc.length);
+            currentCT = data[i].congThuc[rd];
+
+            let bieuMauKiemTraHTML = `
+            <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>🍹 Yêu cầu: ${data[i].ten}</h3>
+                <p><b>Size:</b> ${currentCT.size} &nbsp;|&nbsp; <b>Độ đường:</b> ${currentCT.doDuong} &nbsp;|&nbsp; <b>Lượng đá:</b> ${currentCT.luongDa}</p>
+            </div>`;
+
+            // Sinh đề kiểm tra dựa trên toàn bộ các nguyên liệu đang có
+            dsNguyenLieu.forEach(nl => {
+                if(nl.id === "da") {
+                    bieuMauKiemTraHTML += `
+                    <div class="ingredient-row">
+                        <label style="color: #334155; font-weight: 600;">🧊 ${nl.label}</label>
+                        <input type="text" id="v_da" placeholder="Nhập định lượng đá...">
+                    </div>`;
+                } else {
+                    bieuMauKiemTraHTML += `
+                    <div class="ingredient-row">
+                        <label>
+                            <input type="checkbox" id="u_${nl.id}">
+                            ${nl.label}
+                        </label>
+                        <input type="text" id="v_${nl.id}" placeholder="Nhập định lượng...">
+                    </div>`;
+                }
+            });
+
+            bieuMauKiemTraHTML += `
+            <button class="mt-3" style="width: 100%; padding: 12px; font-size: 1.05rem;" onclick="kiemTra()">✔️ Hoàn Thành & Kiểm Tra</button>
+            <div id="ketQua" class="mt-3"></div>`;
+
+            document.getElementById("deThi").innerHTML = bieuMauKiemTraHTML;
+        }
+
+        function kiemTra() {
+            let loi = [];
+            let setupThanhPhanGoc = currentCT.thanhPhan || {};
+
+            dsNguyenLieu.forEach(nl => {
+                let dapAnGoc = setupThanhPhanGoc[nl.id] || { co: false, gt: "" };
+
+                if (nl.id === "da") {
+                    let vDa = document.getElementById("v_da").value.trim();
+                    if (vDa != dapAnGoc.gt.trim()) {
+                        loi.push(`${nl.label}: Sai định lượng`);
+                    }
+                } else {
+                    let tick = document.getElementById("u_" + nl.id).checked;
+                    let value = document.getElementById("v_" + nl.id).value.trim();
+
+                    if (dapAnGoc.co) {
+                        if (!tick) {
+                            loi.push(`${nl.label}: Thiếu (chưa tích chọn)`);
+                        } else if (value != dapAnGoc.gt.trim()) {
+                            loi.push(`${nl.label}: Sai định lượng`);
+                        }
+                    } else {
+                        if (tick) {
+                            loi.push(`${nl.label}: Dư thừa (công thức không cần thành phần này)`);
+                        }
+                    }
+                }
+            });
+
+            let ketQuaHTML = "";
+
+            if (loi.length == 0) {
+                ketQuaHTML = '<div class="green"><h3>🎉 Tuyệt vời! Bạn đã pha chính xác.</h3></div>';
+            } else {
+                ketQuaHTML = '<div class="red"><h3>❌ Rất tiếc, bạn pha sai rồi.</h3><ul style="margin-top: 10px; margin-left: 20px;">';
+                loi.forEach(x => { ketQuaHTML += `<li>${x}</li>`; });
+                ketQuaHTML += '</ul></div>';
+
+                ketQuaHTML += `
+                <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 15px; border-radius: 8px;">
+                    <h4 style="color: #d97706; margin-bottom: 10px;">💡 ĐÁP ÁN ĐÚNG:</h4>
+                    <ul style="list-style: none; color: #4b5563;">`;
+                
+                dsNguyenLieu.forEach(nl => {
+                    let dapAnGoc = setupThanhPhanGoc[nl.id];
+                    if (nl.id === "da" && dapAnGoc) {
+                        ketQuaHTML += `<li><b>${nl.label}:</b> ${dapAnGoc.gt}</li>`;
+                    } else if (dapAnGoc && dapAnGoc.co) {
+                        ketQuaHTML += `<li><b>${nl.label}:</b> ${dapAnGoc.gt}</li>`;
+                    }
+                });
+
+                ketQuaHTML += '</ul></div>';
+            }
+
+            document.getElementById("ketQua").innerHTML = ketQuaHTML;
+        }
+    </script>
+</body>
+</html>

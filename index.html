@@ -185,6 +185,30 @@
             color: #0f172a;
         }
 
+        .folder-title-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+            flex: 1; /* Cho phép vùng nhấn mở rộng tối đa */
+        }
+
+        .folder-arrow {
+            font-size: 0.85rem;
+            transition: transform 0.2s ease;
+            color: #64748b;
+        }
+
+        /* Khối chứa công thức phục vụ ẩn/hiện */
+        .folder-content {
+            display: block;
+        }
+
+        .folder-content.collapsed {
+            display: none;
+        }
+
         .ct {
             padding: 15px;
             border-bottom: 1px solid #f1f5f9;
@@ -322,7 +346,7 @@
         
         // Danh sách nguyên liệu mặc định ban đầu nếu chưa có trong LocalStorage
         let nguyenLieuMacDinh = [
-            { id: "da", label: "Đá", type: "text" }, // Đá mặc định luôn hiển thị dạng text
+            { id: "da", label: "Đá", type: "text" }, 
             { id: "traCoDuong", label: "Trà có đường", type: "checkbox" },
             { id: "traKhongDuong", label: "Trà không đường", type: "checkbox" },
             { id: "duong", label: "Đường", type: "checkbox" },
@@ -367,10 +391,8 @@
             if (!tenMoi || tenMoi.trim() === "") return;
             
             tenMoi = tenMoi.trim();
-            // Tạo ID không dấu, viết liền để gán cho các thẻ HTML input
             let idMoi = "nl_" + Date.now(); 
 
-            // Thêm vào mảng quản lý nguyên liệu
             dsNguyenLieu.push({
                 id: idMoi,
                 label: tenMoi,
@@ -387,9 +409,18 @@
                 alert("Vui lòng nhập tên nước!");
                 return;
             }
-            data.push({ ten: ten, congThuc: [] });
+            // Mặc định tệp mới tạo sẽ mở ra (isCollapsed = false)
+            data.push({ ten: ten, congThuc: [], isCollapsed: false });
             save();
             folderName.value = "";
+        }
+
+        // Hàm đảo ngược trạng thái đóng/mở của Folder
+        function toggleFolder(i) {
+            data[i].isCollapsed = !data[i].isCollapsed;
+            // Lưu lại trạng thái đóng mở vào LocalStorage và cập nhật lại giao diện nhanh mà không mất dữ liệu khác
+            localStorage.setItem("phaCheData", JSON.stringify(data));
+            renderFolders();
         }
 
         function renderFolders() {
@@ -402,12 +433,20 @@
                 folderSelect.innerHTML += optionHTML;
                 testFolder.innerHTML += optionHTML;
 
+                // Xác định icon và class ẩn/hiện dựa trên isCollapsed
+                let arrowIcon = f.isCollapsed ? "▶" : "▼";
+                let contentClass = f.isCollapsed ? "folder-content collapsed" : "folder-content";
+
                 let html = `
                 <div class="folder">
                     <div class="folder-header">
-                        <span>📁 ${f.ten}</span>
+                        <div class="folder-title-area" onclick="toggleFolder(${i})">
+                            <span class="folder-arrow">${arrowIcon}</span>
+                            <span>📁 ${f.ten} (${f.congThuc.length})</span>
+                        </div>
                         <button class="btn-danger btn-small" onclick="xoaFolder(${i})">Xóa Tệp</button>
                     </div>
+                    <div class="${contentClass}">
                 `;
 
                 if (f.congThuc.length === 0) {
@@ -432,12 +471,11 @@
                         `;
                     });
                 }
-                html += "</div>";
+                html += "</div></div>"; // Đóng thẻ folder-content và folder
                 dsFolder.innerHTML += html;
             });
         }
 
-        // Hàm phụ trợ hiển thị nhanh định lượng nguyên liệu ra ngoài danh sách
         function renderChiTietCongThucInDanhSach(ct) {
             let result = [];
             if(ct.thanhPhan) {
@@ -456,6 +494,7 @@
         }
 
         function xoaFolder(i) {
+            event.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài gây đóng/mở nhầm folder
             if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tệp này?")) {
                 data.splice(i, 1);
                 save();
@@ -469,7 +508,6 @@
                 return;
             }
 
-            // Thu thập dữ liệu pha chế động dựa trên danh sách nguyên liệu hiện có
             let thanhPhanData = {};
             dsNguyenLieu.forEach(nl => {
                 if(nl.id === "da") {
@@ -499,7 +537,6 @@
                 alert("Đã lưu công thức thành công!");
             }
 
-            // Reset form điền sau khi lưu xong
             size.value = "";
             dsNguyenLieu.forEach(nl => {
                 if(nl.id !== "da") document.getElementById("cb_" + nl.id).checked = false;
@@ -526,7 +563,6 @@
             luongDa.value = ct.luongDa;
             doDuong.value = ct.doDuong;
 
-            // Đổ lại dữ liệu cũ vào form điền nguyên liệu động
             if(ct.thanhPhan) {
                 dsNguyenLieu.forEach(nl => {
                     let dataNLCu = ct.thanhPhan[nl.id];
@@ -563,7 +599,6 @@
                 <p><b>Size:</b> ${currentCT.size} &nbsp;|&nbsp; <b>Độ đường:</b> ${currentCT.doDuong} &nbsp;|&nbsp; <b>Lượng đá:</b> ${currentCT.luongDa}</p>
             </div>`;
 
-            // Sinh đề kiểm tra dựa trên toàn bộ các nguyên liệu đang có
             dsNguyenLieu.forEach(nl => {
                 if(nl.id === "da") {
                     bieuMauKiemTraHTML += `
